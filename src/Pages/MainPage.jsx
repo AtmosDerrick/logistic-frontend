@@ -7,7 +7,7 @@ import Decription from "../components/Decription";
 function MainPage() {
   const [functionality, setFunctionality] = useState("view");
   return (
-    <div className="flex justify-between gap-4 mt-8">
+    <div div className="flex justify-between gap-4 mt-8">
       <div className="w-1/4 left-1">
         <Menu
           functionality={functionality}

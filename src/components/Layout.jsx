@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { Route, Navigate, Outlet } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
+
 const Layout = ({ component: RouteComponent, ...rest }) => {
-  const { token } = useContext(UserContext);
-  return <div>{!!token ? <Outlet /> : <Navigate to={"/signin"} />}</div>;
+  const { user } = UserAuth();
+  return <div>{!!user ? <Outlet /> : <Navigate to={"/"} />}</div>;
 };
 
 export default Layout;

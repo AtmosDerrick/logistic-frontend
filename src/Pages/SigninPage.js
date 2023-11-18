@@ -1,16 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Navigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import axios from "axios";
 
 function SigninPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setredirect] = useState(false);
 
-  const authencateUser = (e) => {
+  const { setUser, user, setToken } = useContext(UserContext);
+  const authencateUser = async (e) => {
     e.preventDefault();
-    if (username === "derrick" && password === "12345") {
+
+    try {
+      const userInfo = await axios.post("/auth/login/", {
+        username,
+        password,
+      });
+      setToken(userInfo.data.token);
+      setUser(userInfo.data.user.id);
+
       setredirect(true);
-      console.log("work");
+
+      // setLoggedIn(false);
+    } catch (e) {
+      // setCatchPage(true);
     }
   };
 

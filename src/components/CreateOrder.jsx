@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import axios from "axios";
+import { UserContext } from "../context/UserContext";
 
 const CreateOrder = () => {
   const [formData, setFormData] = useState({
@@ -21,7 +23,7 @@ const CreateOrder = () => {
   //part 2
   const [product, setProduct] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [Weight, setWeight] = useState("");
+  const [weight, setWeight] = useState("");
   const [itemsType, setItemType] = useState("");
   const [packageD, setPackageD] = useState("");
   const [handle, setHandle] = useState("");
@@ -32,6 +34,12 @@ const CreateOrder = () => {
   const [reciverContact, setreciverContact] = useState("");
   const [recieverEmail, setrecieverEmail] = useState("");
   const [recieversAddress, setrecieversAddress] = useState("");
+
+  //setPromt
+  
+
+  const { userInfo, setToken } = useContext(UserContext);
+  console.log(userInfo.location);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -77,6 +85,75 @@ const CreateOrder = () => {
     if (itemList > 1) {
       setItemList((prevPart) => prevPart - 1);
     }
+  };
+
+  const productInfo = {
+    // attendance: user.id,
+    sender_name: name,
+
+    sender_contact: contact,
+    sender_email: email,
+    sender_address: Address,
+    sender_location: userInfo.location,
+
+    product,
+    quantity,
+    weight: weight,
+    item_type: itemsType,
+    destination: packageD,
+    handle_preference: handle,
+    price: cost,
+    reciever_name: recieverName,
+    reciever_contact: reciverContact,
+    reciever_email: recieverEmail,
+    reciever_address: recieversAddress,
+  };
+
+  const handleSubmit = async () => {
+    console.log("llllkkk");
+
+    const productInfo = await axios.post("/product/create/", {
+      sender_name: name,
+      sender_contact: contact,
+      sender_email: email,
+      sender_address: Address,
+      sender_location: userInfo.location,
+      // sender_location: user.location,
+      product,
+      quantity,
+      weight,
+      item_type: itemsType,
+      destination: "accra",
+      handle_preference: handle,
+      price: cost,
+      reciever_name: recieverName,
+      reciever_contact: reciverContact,
+      reciever_email: recieverEmail,
+      reciever_address: recieversAddress,
+      reciever_location: recieversAddress,
+      User: userInfo.User,
+
+      status: "package ",
+    });
+
+    setName("");
+    setContact("");
+    setEmail("");
+    setAddress("");
+
+    setCurrentPart(1);
+    setProduct("");
+    setQuantity("");
+    setWeight("");
+
+    setrecieverName("");
+    setreciverContact("");
+    setEmail("");
+    setAddress("");
+
+    console.log(productInfo);
+
+    // setLoggedIn(false);
   };
 
   return (
@@ -170,18 +247,18 @@ const CreateOrder = () => {
               <label>
                 Quantity:
                 <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
+                  type="quantity"
+                  name="quantity"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
                 />
               </label>
               <label>
                 Weight:
                 <input
-                  type="email"
-                  name="email"
-                  value={Weight}
+                  type="weight"
+                  name="weight"
+                  value={weight}
                   onChange={(e) => setWeight(e.target.value)}
                 />
               </label>
@@ -336,7 +413,7 @@ const CreateOrder = () => {
             <div className=" ">
               <div
                 className="text-gray-900 flex gap-2 bg-primary px-4 py-2 font-semibold text-white"
-                onClick={handlenext}>
+                onClick={handleSubmit}>
                 Submit
                 <div>
                   <svg
