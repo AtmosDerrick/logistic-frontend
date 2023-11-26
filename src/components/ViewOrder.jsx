@@ -1,60 +1,116 @@
-import React from "react";
+import { faBan, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useContext, useEffect, useState } from "react";
+import Decription from "./Decription";
+import axios from "axios";
+import { UserContext } from "../context/UserContext";
 
 function ViewOrder() {
+  const [search, setSearch] = useState("");
+  const [active, setActive] = useState("arrivals");
+  const [viewPackages, setViewPackages] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [productCode, setProductCode] = useState("");
+
+  const { userInfo, setToken } = useContext(UserContext);
+
+  useEffect(() => {
+    // Fetch the list of jobs
+    axios
+      .get("product/recieveproduct/" + userInfo.location, {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: ``,
+        },
+      })
+      .then((response) => {
+        setViewPackages(response.data.data);
+        setLoading(false);
+
+        // const sortedPackages = [...viewPackages].sort(
+        //   (a, b) => new Date(b.datetime) - new Date(a.datetime)
+        // );
+
+        // setViewPackages(sortedPackages);
+      })
+      .catch((error) => {});
+  }, [loading]);
+
+  console.log(productCode, "kk");
+
+  // const buttonClass =
+  //   "w-full mx-4 border-4 border-primary text-center py-2 rounded-2xl text-primary font-lg hover:cursor-pointer hover:opacity-50 font-medium shadow-md";
+  // const activeButton =
+  //   "w-full mx-4 border-4 bg-primary border-primary text-center py-2 rounded-2xl text-white font-lg hover:cursor-pointer hover:opacity-50 font-medium ";
   return (
-    <div>
-      <div className="px-2 text-lg font-semibold text-gray-700 uppercase mt-4">
-        Orders
+    <div className="flex justify-between gap-4">
+      <div className="w-full justify-between gap-4 mr-4">
+        <div className="px-4 text-lg font-semibold text-gray-700 uppercase mt-4">
+          Recieved Packages
+        </div>
+        <div className=" flex  justify-end w-full items-center text-lg my-4 font-semibold text-primary mx-4">
+          <div className="flex  justify-start w-full py-2 items-end">
+            <div className="border-2  border-primary w-full h-12 mr-2   rounded-xl pl-2 py-2 flex items-center">
+              <div className="text-gray-900 mr-4">
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
+              </div>
+              <input
+                type="text"
+                placeholder="Search"
+                className=" w-full p-2 text-sm border-primary   focus:outline-none bg-none"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="container mx-auto mt-8 bg-none rounded-2xl h-full p-4">
+          <table className="w-full bg-none  border-gray-300 text-left">
+            <thead>
+              <tr>
+                <th className="py-2  border-b px-4">Sender's Name</th>
+
+                <th className="py-2  border-b px-4">Package Name</th>
+                <th className="py-2 border-b px-4">Destination</th>
+                <th className="py-2 border-b px-4">Date and Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {viewPackages !== "" &&
+                viewPackages.map((packageItem) => (
+                  <tr
+                    key={packageItem.product_code}
+                    className="hover:cursor-pointer hover:opacity-80 mb-4"
+                    onClick={() => {
+                      setProductCode(packageItem.product_code);
+                    }}>
+                    <td className="py-2 px-4 border-b">
+                      {packageItem.sender_name}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                      {packageItem.product}
+                    </td>
+                    <td className="py-2 px-4 border-b">
+                      {packageItem.destination}
+                    </td>
+
+                    <td className="py-2 px-4 border-b">
+                      {packageItem.datetime}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div>
-        <ul className="w-full px-2 flex grid-cols-5 mt-4 ">
-          <li className="w-full text-left text-gray-700 text-base">
-            Order Code
-          </li>
-          <li className="w-full text-left text-gray-700 text-base">
-            Item Type
-          </li>
-          <li className="w-full text-left text-gray-700 text-base">Item</li>
-          <li className="w-full text-left text-gray-700 text-base">
-            Destination
-          </li>
-          <li className="w-full text-left text-gray-700 text-base">Status</li>
-        </ul>
-        <ul className="w-full px-2 flex grid-cols-5 mt-4 bg-white py-2 rounded-2xl">
-          <li className="w-full text-left text-gray-700 text-base">x12cde</li>
-          <li className="w-full text-left text-gray-700 text-base">
-            Electronics
-          </li>
-          <li className="w-full text-left text-gray-700 text-base">Item</li>
-          <li className="w-full text-left text-gray-700 text-base">Accra</li>
-          <li className="w-full text-white text-base bg-blue-400 text-center rounded-2xl font-medium ">
-            Shiped
-          </li>
-        </ul>
-        <ul className="w-full px-2 flex grid-cols-5 mt-4 bg-white py-2 rounded-2xl">
-          <li className="w-full text-left text-gray-700 text-base">x12cde</li>
-          <li className="w-full text-left text-gray-700 text-base">
-            Electronics
-          </li>
-          <li className="w-full text-left text-gray-700 text-base">Item</li>
-          <li className="w-full text-left text-gray-700 text-base">Accra</li>
-          <li className="w-full text-white text-base bg-yellow-500 text-center rounded-2xl font-medium ">
-            Recieved
-          </li>
-        </ul>
-        <ul className="w-full px-2 flex grid-cols-5 mt-4 bg-white py-2 rounded-2xl">
-          <li className="w-full text-left text-gray-700 text-base">x12cde</li>
-          <li className="w-full text-left text-gray-700 text-base">
-            Electronics
-          </li>
-          <li className="w-full text-left text-gray-700 text-base">Item</li>
-          <li className="w-full text-left text-gray-700 text-base">Accra</li>
-          <li className="w-full text-white text-base bg-green-600 text-center rounded-2xl font-medium ">
-            Delivered
-          </li>
-        </ul>
-      </div>
-      <div></div>
+      {
+        <div className="w-2/4 h-[90vh]   bg-gray-100">
+          <Decription productCode={productCode} />
+        </div>
+      }
     </div>
   );
 }

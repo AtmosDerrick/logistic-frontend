@@ -13,8 +13,8 @@ function App() {
   axios.defaults.withCredentials = true;
   return (
     <UserContextProvider>
-      <div className="w-full bg-orange-50">
-        <div className="w-full mx-auto my-2 px-8 ">
+      <div className="w-full ">
+        <div className="w-full mx-auto my-2 ">
           <Routes>
             <Route path="/signin" element={<SigninPage />} />
 

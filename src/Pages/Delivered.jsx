@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
 
-function Shipped() {
+function Delivered() {
   const [search, setSearch] = useState("");
   const [active, setActive] = useState("arrivals");
   const [viewPackages, setViewPackages] = useState([]);
@@ -15,7 +15,7 @@ function Shipped() {
   useEffect(() => {
     // Fetch the list of jobs
     axios
-      .get("product/shippingproduct/" + userInfo.location.toLowerCase(), {
+      .get("product/arrivalproduct/" + userInfo.location.toLowerCase(), {
         headers: {
           "Content-type": "application/json",
           Authorization: ``,
@@ -41,7 +41,7 @@ function Shipped() {
   return (
     <div>
       <div className="px-4 text-lg font-semibold text-gray-700 uppercase mt-4">
-        Shipped Packages
+        Packages Arrivals
       </div>
 
       <div className="container mx-auto mt-8 bg-none rounded-2xl h-full p-4">
@@ -52,6 +52,8 @@ function Shipped() {
               <th className="py-2  border-b px-4">Package Name</th>
               <th className="py-2 border-b px-4">Destination</th>
               <th className="py-2 border-b px-4">Date and Time</th>
+              <th className="py-2 border-b px-4">Status</th>
+              <th className="py-2 border-b px-4">Confirm</th>
             </tr>
           </thead>
           <tbody>
@@ -70,6 +72,14 @@ function Shipped() {
                   </td>
 
                   <td className="py-2 px-4 border-b">{packageItem.datetime}</td>
+                  <td className="py-2 px-4 border-b">
+                    {packageItem.product_status}
+                  </td>
+                  <td className="py-2 border-b ">
+                    <button className="bg-blue-500  text-center rounded-md px-0">
+                      Arrive
+                    </button>
+                  </td>
                 </tr>
               ))}
           </tbody>
@@ -79,4 +89,4 @@ function Shipped() {
   );
 }
 
-export default Shipped;
+export default Delivered;

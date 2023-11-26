@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import ViewOrder from "./ViewOrder";
 import CreateOrder from "./CreateOrder";
 import Shipped from "./Shipped";
+import Delivered from "../Pages/Delivered";
+import Delivery from "./Delivery";
 
 function Details({ functionality }) {
   const [showFunctionality, setShowFunctionality] = useState("view");
@@ -18,8 +20,11 @@ function Details({ functionality }) {
         setShowFunctionality("shipped");
         break;
       case "Delivered":
-        setShowFunctionality("create");
+        setShowFunctionality("delivered");
         break;
+
+      default:
+        setShowFunctionality("delivery");
     }
   }, [functionality]);
 
@@ -30,6 +35,10 @@ function Details({ functionality }) {
     return <CreateOrder />;
   } else if (showFunctionality === "shipped") {
     return <Shipped />;
+  } else if (showFunctionality === "delivered") {
+    return <Delivered />;
+  } else if (showFunctionality === "delivery") {
+    return <Delivery />;
   }
 }
 

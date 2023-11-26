@@ -1,11 +1,62 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { UserContext } from "../context/UserContext";
+import axios from "axios";
 
 function Menu({ functionality, setFunctionality }) {
+  const { userInfo, setToken } = useContext(UserContext);
+
   const viewDetail = (type) => {
     setFunctionality(type);
   };
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+
+    try {
+      const userInfo = await axios.post("/auth/logout/");
+      setToken("");
+
+      // setLoggedIn(false);
+    } catch (e) {
+      // setCatchPage(true);
+    }
+  };
+
+  const buttonClass =
+    "cursor-pointer hover:shadow-lg bg-white text-primary font-medium p-2  mb-8 border-l-4  border-lighter rounded-r-full";
+
+  // const ButtonClickActive = (action) => {
+  //   switch (action) {
+  //     case "dashboard":
+  //       setButtonClick("dashboard");
+  //       break;
+  //     case "users":
+  //       setButtonClick("users");
+  //       break;
+  //     case "bookings":
+  //       setButtonClick("bookings");
+  //       break;
+  //     case "services":
+  //       setButtonClick("services");
+  //       break;
+  //     case "reports":
+  //       setButtonClick("reports");
+  //       break;
+  //     case "coupons":
+  //       setButtonClick("coupons");
+  //       break;
+  //     case "jobs":
+  //       setButtonClick("jobs");
+  //       break;
+  //     case "ads":
+  //       setButtonClick("ads");
+  //       break;
+  //     default:
+  //       setButtonClick("dashboard");
+  //   }
+  // };
   return (
-    <div className="w-full bg-gradient-to-b from-primary to-darkprimary h-[70vh] p-4 rounded-2xl">
+    <div className="w-full bg-gradient-to-b from-primary to-darkprimary  py-4 px-1 rounded-2xl h-[90vh]">
       <ul className="text-white text-lg font-semibold">
         <li className="flex justify-center">
           <div>
@@ -24,23 +75,25 @@ function Menu({ functionality, setFunctionality }) {
             </div>
           </div>
         </li>
-        <li className="flex justify-center">
+        <li className="flex justify-center mb-4">
           <div className="text-center">
-            <div>UserName</div>
-            <div className="text-base font-medium text-gray-700">
-              Region - Town
+            <div className="pt-4">
+              {userInfo.first_name} {userInfo.last_name}
+            </div>
+            <div className="text-base font-medium text-gray-100 mb-2">
+              {userInfo.location}
             </div>
           </div>
         </li>
         <li
-          className="my-6 cursor-pointer hover:opacity-60"
+          className={buttonClass}
           onClick={() => {
             viewDetail("view");
           }}>
-          View Order
+          Recieved Items
         </li>
         <li
-          className="my-6 cursor-pointer hover:opacity-60"
+          className={buttonClass}
           onClick={() => {
             viewDetail("create");
           }}>
@@ -48,26 +101,32 @@ function Menu({ functionality, setFunctionality }) {
         </li>
 
         <li
-          className="my-6 cursor-pointer hover:opacity-60"
+          className={buttonClass}
           onClick={() => {
             viewDetail("shipped");
           }}>
           Shipped
         </li>
         <li
-          className="my-6 cursor-pointer hover:opacity-60"
+          className={buttonClass}
           onClick={() => {
             viewDetail("Delivered");
           }}>
-          Delivered
+          Arrivals
         </li>
         <li
-          className="my-6 cursor-pointer hover:opacity-60"
+          className={buttonClass}
           onClick={() => {
             viewDetail("setting");
           }}>
-          Settings
+          Deliver Item
         </li>
+
+        <button
+          className="text-white w-full text-center hover:opacity-50 hover:cursor-pointer mt-12"
+          onClick={handleLogout}>
+          Logout
+        </button>
       </ul>
     </div>
   );

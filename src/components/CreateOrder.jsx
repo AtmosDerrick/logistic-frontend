@@ -36,10 +36,9 @@ const CreateOrder = () => {
   const [recieversAddress, setrecieversAddress] = useState("");
 
   //setPromt
-  
+  const [prompt, setPrompt] = useState(false);
 
   const { userInfo, setToken } = useContext(UserContext);
-  console.log(userInfo.location);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -117,13 +116,13 @@ const CreateOrder = () => {
       sender_contact: contact,
       sender_email: email,
       sender_address: Address,
-      sender_location: userInfo.location,
+      sender_location: userInfo.location.toLowerCase(),
       // sender_location: user.location,
       product,
       quantity,
       weight,
       item_type: itemsType,
-      destination: "accra",
+      destination: recieversAddress,
       handle_preference: handle,
       price: cost,
       reciever_name: recieverName,
@@ -133,7 +132,10 @@ const CreateOrder = () => {
       reciever_location: recieversAddress,
       User: userInfo.User,
 
-      status: "package ",
+      product_status: "Recieved",
+      is_cancel: false,
+      shipping_confirmation: true,
+      arrival_confirmation: true,
     });
 
     setName("");
@@ -156,15 +158,17 @@ const CreateOrder = () => {
     // setLoggedIn(false);
   };
 
+  const inputClass = "";
+
   return (
-    <div>
-      <div className="w-3/4 mx-auto bg-gray-200 mt-4 ">
+    <div className="w-3/4 mx-auto">
+      <div className="w-full  mx-auto bg-gray-200 mt-4 ">
         <div
-          className="h-4 bg-blue-500"
+          className="h-4 bg-[#780000]"
           style={{ width: `${calculateProgress()}%` }}></div>
       </div>
       {currentPart === 1 && (
-        <div className="mt-4 w-3/4 mx-auto">
+        <div className="mt-4 w-full px-8 mx-auto">
           <h2 className="text-lg font-semibold">Part 1: Sender's Info</h2>
           <form>
             <label>
@@ -226,48 +230,36 @@ const CreateOrder = () => {
                   />
                 </label>
               </div>
-              <div className="flex items-center w-1/4">
-                <div className="flex justify-between gap-4">
-                  <button
-                    className="text-center bg-primary w-10 h-10 cursor-pointer"
-                    onClick={addItem}>
-                    +
-                  </button>
-                  <button
-                    className="text-center bg-primary w-10 h-10 cursor-pointer"
-                    onClick={subItem}>
-                    -
-                  </button>
-                </div>
-              </div>
             </div>
 
-            <div className="flex justify-between gap-4">
+            <div className="flex justify-between gap-4 pt-12">
               {" "}
               <label>
-                Quantity:
                 <input
                   type="quantity"
                   name="quantity"
                   value={quantity}
+                  placeholder=" Quantity:"
+                  className="p-2 font-medium mr-2"
                   onChange={(e) => setQuantity(e.target.value)}
                 />
               </label>
               <label>
-                Weight:
                 <input
                   type="weight"
                   name="weight"
+                  placeholder=" Weight:"
+                  className="p-2 font-medium mr-2"
                   value={weight}
                   onChange={(e) => setWeight(e.target.value)}
                 />
               </label>
-              <label>
-                Item Type:
+              <label className="flex">
                 <select
                   value={itemsType}
+                  defaultValue={1}
                   onChange={(e) => setItemType(e.target.value)}
-                  className="py-2 px-4 rounded-2xl flex items-center">
+                  className="py-2 px-4  flex items-center mr-2">
                   <option value="">Select an item type</option>
                   <option value="Electronics">Electronics</option>
                   <option value="Clothing">Clothing</option>
@@ -278,14 +270,14 @@ const CreateOrder = () => {
               </label>
             </div>
             <br />
-            <div className="flex justify-between gap-4">
+            <div className="flex justify-between gap-4 mt-8">
               <label>
-                Product Destination
                 <select
                   value={itemsType}
-                  onChange={(e) => setItemType(e.target.value)}
-                  className="py-2 px-4 rounded-2xl flex items-center">
-                  <option value="">Select an item type</option>
+                  defaultValue={1}
+                  onChange={(e) => setPackageD(e.target.value)}
+                  className="py-2 px-4  flex  w-full items-center">
+                  <option value="">Select Region</option>
                   <option value="Electronics">Greater Accra</option>
                   <option value="Clothing">Clothing</option>
                   <option value="Furniture">Furniture</option>
@@ -294,22 +286,33 @@ const CreateOrder = () => {
                 </select>
               </label>
               <label>
-                Handle Preference:
                 <select
                   value={handle}
+                  defaultValue={1}
                   onChange={(e) => setHandle(e.target.value)}
-                  className="py-2 px-4 rounded-2xl flex items-center">
-                  <option value="">Select an item type</option>
+                  className="py-2 px-4 w-full flex items-center">
+                  <option value="">Handle Preference:</option>
                   <option value="Electronics">Primuime Delivery</option>
                   <option value="Clothing">Free Delivery</option>
                   <option value="Furniture">Breakable</option>
                   {/* Add more options as needed */}
                 </select>
               </label>
-              <label className="text-primary text-xl font-semibold flex items-center px-8">
-                Ghc 50.00
-              </label>
+
+              <div>
+                {" "}
+                <textarea
+                  id="w3review"
+                  name="w3review"
+                  rows="4"
+                  cols="50"
+                  placeholder="Description of items"
+                />
+              </div>
             </div>
+            <label className="text-primary text-xl font-semibold flex items-center px-8">
+              Ghc 50.00
+            </label>
             <br />
           </form>
         </div>
@@ -361,11 +364,11 @@ const CreateOrder = () => {
         </div>
       )}
 
-      <div className="mx-auto w-3/4 flex justify-between px-4">
+      <div className="mx-auto w-full flex justify-between px-8 mt-8 ">
         {currentPart !== 1 ? (
           <div>
             <div className="text-gray-900 flex gap-2 " onClick={handleBack}>
-              <div>
+              <div className="">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -387,10 +390,12 @@ const CreateOrder = () => {
           ""
         )}
 
-        <div className="">
+        <div className="bg-primary text-white py-2 px-8">
           {currentPart !== 3 ? (
             <div className="">
-              <div className="text-gray-900 flex gap-2" onClick={handlenext}>
+              <div
+                className="text-white font-medium flex gap-2"
+                onClick={handlenext}>
                 Next{" "}
                 <div>
                   <svg
@@ -412,7 +417,7 @@ const CreateOrder = () => {
           ) : (
             <div className=" ">
               <div
-                className="text-gray-900 flex gap-2 bg-primary px-4 py-2 font-semibold text-white"
+                className=" flex gap-2 bg-primary px-4 py-2 font-semibold text-white"
                 onClick={handleSubmit}>
                 Submit
                 <div>
