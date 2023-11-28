@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { UserContext } from "../context/UserContext";
 
 function Decription({ productCode }) {
   const [viewPackages, setViewPackages] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const { token } = useContext(UserContext);
   useEffect(() => {
     if (productCode != "") {
       // Fetch the list of jobs
@@ -12,7 +14,7 @@ function Decription({ productCode }) {
         .get("product/oneproduct/" + productCode, {
           headers: {
             "Content-type": "application/json",
-            Authorization: ``,
+            Authorization: `Token ${token}`,
           },
         })
         .then((response) => {
@@ -29,54 +31,57 @@ function Decription({ productCode }) {
     }
   }, [productCode]);
 
-  const handleShip = async () => {
-    await axios
-      .put(
-        "product/oneproduct/" + productCode + "/",
-        {
-          sender_name: viewPackages.sender_name,
-          sender_contact: viewPackages.sender_contact,
-          sender_email: viewPackages.sender_email,
-          sender_address: viewPackages.sender_address,
-          sender_location: viewPackages.sender_location,
-          // sender_location: user.location,
-          product: viewPackages.product,
-          quantity: viewPackages.quantity,
-          weight: viewPackages.weight,
-          item_type: viewPackages.item_type,
-          destination: viewPackages.destination,
-          handle_preference: viewPackages.handle_preference,
-          price: viewPackages.price,
-          reciever_name: viewPackages.reciever_name,
-          reciever_contact: viewPackages.reciever_contact,
-          reciever_email: viewPackages.reciever_email,
-          reciever_address: viewPackages.reciever_address,
-          reciever_location: viewPackages.reciever_address,
-          User: viewPackages.User,
-          shipping_confirmation: false,
-          is_cancel: viewPackages.is_cancel,
-          product_status: viewPackages.product_status,
-          product_code: productCode,
-        },
-        {
-          headers: {
-            "Content-type": "application/json",
-            Authorization: ``,
+  const handleShip = async (condition) => {
+    console.log(condition, "working");
+    if (condition == null) {
+      await axios
+        .put(
+          "product/oneproduct/" + productCode + "/",
+
+          {
+            sender_name: viewPackages.sender_name,
+            sender_contact: viewPackages.sender_contact,
+            sender_email: viewPackages.sender_email,
+            sender_address: viewPackages.sender_address,
+            sender_location: viewPackages.sender_location,
+            // sender_location: user.location,
+            product: viewPackages.product,
+            quantity: viewPackages.quantity,
+            weight: viewPackages.weight,
+            item_type: viewPackages.item_type,
+            destination: viewPackages.destination,
+            handle_preference: viewPackages.handle_preference,
+            price: viewPackages.price,
+            reciever_name: viewPackages.reciever_name,
+            reciever_contact: viewPackages.reciever_contact,
+            reciever_email: viewPackages.reciever_email,
+            reciever_address: viewPackages.reciever_address,
+            reciever_location: viewPackages.reciever_address,
+            User: viewPackages.User,
+
+            is_cancel: viewPackages.is_cancel,
+            product_status: viewPackages.product_status,
+            product_code: productCode,
           },
-        }
-      )
-      .then((response) => {
-        setViewPackages(response.data);
-        setLoading(false);
-        console.log(viewPackages, "edit");
-
-        // const sortedPackages = [...viewPackages].sort(
-        //   (a, b) => new Date(b.datetime) - new Date(a.datetime)
-        // );
-
-        // setViewPackages(sortedPackages);
-      })
-      .catch((error) => {});
+          {
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `Token ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          setViewPackages(response.data);
+          setLoading(false);
+          console.log(viewPackages, "edit");
+          // const sortedPackages = [...viewPackages].sort(
+          //   (a, b) => new Date(b.datetime) - new Date(a.datetime)
+          // );
+          // setViewPackages(sortedPackages);
+        })
+        .catch((error) => {});
+    }
   };
   return (
     <div className=" ">
@@ -137,9 +142,21 @@ function Decription({ productCode }) {
           </ul>
           <div className="flex gap-4 px-4 mt-12">
             <div
-              className="w-full text-white text-base bg-blue-500 text-center  font-medium py-2 hover:opacity-50 hover:cursor-pointer "
-              onClick={handleShip}>
-              Ship
+              className={
+                viewPackages.shipping_confirmation == false
+                  ? " bg-green-500 w-full text-white text-base text-center  font-medium py-2 hover:opacity-50 hover:cursor-pointer  "
+                  : viewPackages.shipping_confirmation == true
+                  ? "bg-blue-500 w-full text-white text-base text-center  font-medium py-2 hover:opacity-50 hover:cursor-pointer"
+                  : "bg-red-500 w-full text-white text-base text-center  font-medium py-2 hover:opacity-50 hover:cursor-pointer"
+              }
+              onClick={() => {
+                handleShip(viewPackages.shipping_confirmation);
+              }}>
+              {viewPackages.shipping_confirmation === true
+                ? "Waiting Confirmation"
+                : viewPackages.shipping_confirmation === false
+                ? "Done Shipped"
+                : "Ship Package"}
             </div>
           </div>
         </div>

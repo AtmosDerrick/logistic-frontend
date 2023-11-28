@@ -10,7 +10,7 @@ function Shipped() {
   const [viewPackages, setViewPackages] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const { userInfo, setToken } = useContext(UserContext);
+  const { userInfo, token } = useContext(UserContext);
 
   useEffect(() => {
     // Fetch the list of jobs
@@ -18,7 +18,7 @@ function Shipped() {
       .get("product/shippingproduct/" + userInfo.location.toLowerCase(), {
         headers: {
           "Content-type": "application/json",
-          Authorization: ``,
+          Authorization: `Token ${token}`,
         },
       })
       .then((response) => {

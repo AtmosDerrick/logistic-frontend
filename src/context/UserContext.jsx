@@ -10,31 +10,32 @@ export function UserContextProvider({ children }) {
 
   useEffect(() => {
     console.log(user, "kkk");
-    const fetchUser = async () => {
-      try {
-        const userInfo = await axios
-          .get("auth/user/" + user, {
-            headers: {
-              "Content-type": "application/json",
-              Authorization: `Token ${token}`,
-            },
-          })
-          .then((respond) => {
-            setUserInfo(respond.data.data);
-            console.log(userInfo);
-          });
+    // const fetchUser = async () => {
+    //   try {
+    //     const userInfo = await axios
+    //       .get("auth/user/" + user, {
+    //         headers: {
+    //           "Content-type": "application/json",
+    //           Authorization: `Token ${token}`,
+    //         },
+    //       })
+    //       .then((respond) => {
+    //         setUserInfo(respond.data.data);
+    //         console.log(userInfo);
+    //       });
 
-        // setLoggedIn(false);
-      } catch (e) {
-        // setCatchPage(true);
-      }
-    };
+    //     // setLoggedIn(false);
+    //   } catch (e) {
+    //     // setCatchPage(true);
+    //   }
+    // };
 
-    fetchUser();
+    // fetchUser();
   }, [token]);
 
   return (
-    <UserContext.Provider value={{ user, setUser, token, setToken, userInfo }}>
+    <UserContext.Provider
+      value={{ user, setUser, token, setToken, userInfo, setUserInfo }}>
       {children}
     </UserContext.Provider>
   );

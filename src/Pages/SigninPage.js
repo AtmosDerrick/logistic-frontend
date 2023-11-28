@@ -8,19 +8,39 @@ function SigninPage() {
   const [password, setPassword] = useState("");
   const [redirect, setredirect] = useState(false);
 
-  const { setUser, user, setToken } = useContext(UserContext);
+  const { setUser, user, setToken, setUserInfo, token, userInfo } =
+    useContext(UserContext);
+
   const authencateUser = async (e) => {
     e.preventDefault();
 
     try {
-      const userInfo = await axios.post("/auth/login/", {
-        username,
-        password,
-      });
-      setToken(userInfo.data.token);
-      setUser(userInfo.data.user.id);
+      const signdata = await axios
+        .post("/auth/login/", {
+          username,
+          password,
+        })
+        .then((res) => {
+          setToken(res.data.token);
 
-      setredirect(true);
+          setUser(res.data.user.id);
+          axios
+            .get("auth/user/" + res.data.user.id, {
+              headers: {
+                "Content-type": "application/json",
+                Authorization: `Token ${res.data.token}`,
+              },
+            })
+            .then((respond) => {
+              setUserInfo(respond.data.data);
+              console.log(respond.data.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          setredirect(true);
+        });
 
       // setLoggedIn(false);
     } catch (e) {

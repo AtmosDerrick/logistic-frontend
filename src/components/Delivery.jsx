@@ -11,7 +11,7 @@ function Delivery() {
   const [alert, setAlert] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { userInfo, setToken } = useContext(UserContext);
+  const { userInfo, token } = useContext(UserContext);
 
   const labelClass = "text-lg font-medium text-primary";
   const packageClass = "text-base font-medium text-gray-500";
@@ -27,7 +27,7 @@ function Delivery() {
           {
             headers: {
               "Content-type": "application/json",
-              Authorization: ``,
+              Authorization: `Token ${token}`,
             },
           }
         )
@@ -44,6 +44,59 @@ function Delivery() {
         .catch((error) => {});
     } else {
       setAlert(true);
+    }
+  };
+
+  const handleDeliver = async () => {
+    console.log(condition, "working");
+    if (condition == null) {
+      await axios
+        .put(
+          "product/oneproduct/" + arrivalPackage.product_code + "/",
+
+          {
+            sender_name: arrivalPackage.sender_name,
+            sender_contact: arrivalPackage.sender_contact,
+            sender_email: arrivalPackage.sender_email,
+            sender_address: arrivalPackage.sender_address,
+            sender_location: arrivalPackage.sender_location,
+            // sender_location: user.location,
+            product: arrivalPackage.product,
+            quantity: arrivalPackage.quantity,
+            weight: arrivalPackage.weight,
+            item_type: arrivalPackage.item_type,
+            destination: arrivalPackage.destination,
+            handle_preference: arrivalPackage.handle_preference,
+            price: arrivalPackage.price,
+            reciever_name: arrivalPackage.reciever_name,
+            reciever_contact: arrivalPackage.reciever_contact,
+            reciever_email: arrivalPackage.reciever_email,
+            reciever_address: arrivalPackage.reciever_address,
+            reciever_location: arrivalPackage.reciever_address,
+            User: arrivalPackage.User,
+
+            is_cancel: arrivalPackage.is_cancel,
+            product_status: "Delivered",
+            product_code: arrivalPackage.product_code,
+          },
+          {
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `Token ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          setArrivalPackage(response.data);
+          setLoading(false);
+          console.log(arrivalPackage, "edit");
+          // const sortedPackages = [...viewPackages].sort(
+          //   (a, b) => new Date(b.datetime) - new Date(a.datetime)
+          // );
+          // setViewPackages(sortedPackages);
+        })
+        .catch((error) => {});
     }
   };
   return (
@@ -176,7 +229,7 @@ function Delivery() {
                     </div>
                   </div>
                   <div className="w-1/6 mt-8">
-                    <button className="text-white text-lg bg-green-600 px-6 py-2 rounded-md">
+                    <button className="text-white text-lg bg-green-600 px-6 py-2 rounded-md" onClick={}>
                       Deliver
                     </button>
                   </div>

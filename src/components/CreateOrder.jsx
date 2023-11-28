@@ -38,7 +38,7 @@ const CreateOrder = () => {
   //setPromt
   const [prompt, setPrompt] = useState(false);
 
-  const { userInfo, setToken } = useContext(UserContext);
+  const { userInfo ,token } = useContext(UserContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -111,32 +111,50 @@ const CreateOrder = () => {
   const handleSubmit = async () => {
     console.log("llllkkk");
 
-    const productInfo = await axios.post("/product/create/", {
-      sender_name: name,
-      sender_contact: contact,
-      sender_email: email,
-      sender_address: Address,
-      sender_location: userInfo.location.toLowerCase(),
-      // sender_location: user.location,
-      product,
-      quantity,
-      weight,
-      item_type: itemsType,
-      destination: recieversAddress,
-      handle_preference: handle,
-      price: cost,
-      reciever_name: recieverName,
-      reciever_contact: reciverContact,
-      reciever_email: recieverEmail,
-      reciever_address: recieversAddress,
-      reciever_location: recieversAddress,
-      User: userInfo.User,
+    try {
+      await axios
+        .post(
+          "/product/create/",
+          {
+            sender_name: name,
+            sender_contact: contact,
+            sender_email: email,
+            sender_address: Address,
+            sender_location: userInfo.location.toLowerCase(),
+            // sender_location: user.location,
+            product,
+            quantity,
+            weight,
+            item_type: itemsType,
+            destination: recieversAddress,
+            handle_preference: handle,
+            price: cost,
+            reciever_name: recieverName,
+            reciever_contact: reciverContact,
+            reciever_email: recieverEmail,
+            reciever_address: recieversAddress,
+            reciever_location: recieversAddress,
+            User: userInfo.User,
 
-      product_status: "Recieved",
-      is_cancel: false,
-      shipping_confirmation: true,
-      arrival_confirmation: true,
-    });
+            product_status: "Recieved",
+            is_cancel: false,
+            shipping_confirmation: null,
+            arrival_confirmation: null,
+          },
+          {
+            headers: {
+              "Content-type": "application/json",
+              Authorization: `Token ${token}`,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+        });
+    } catch {}
 
     setName("");
     setContact("");

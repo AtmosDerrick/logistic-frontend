@@ -12,7 +12,7 @@ function ViewOrder() {
   const [loading, setLoading] = useState(true);
   const [productCode, setProductCode] = useState("");
 
-  const { userInfo, setToken } = useContext(UserContext);
+  const { userInfo, setToken, token } = useContext(UserContext);
 
   useEffect(() => {
     // Fetch the list of jobs
@@ -20,7 +20,7 @@ function ViewOrder() {
       .get("product/recieveproduct/" + userInfo.location, {
         headers: {
           "Content-type": "application/json",
-          Authorization: ``,
+          Authorization: `Token ${token}`,
         },
       })
       .then((response) => {
