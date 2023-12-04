@@ -69,7 +69,9 @@ function Shipped() {
                     {packageItem.destination}
                   </td>
 
-                  <td className="py-2 px-4 border-b">{packageItem.datetime}</td>
+                  <td className="py-2 px-4 border-b">
+                    {packageItem.datetime.split("T")[0]}
+                  </td>
                 </tr>
               ))}
           </tbody>

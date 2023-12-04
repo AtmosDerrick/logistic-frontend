@@ -48,8 +48,7 @@ function Delivery() {
   };
 
   const handleDeliver = async () => {
-    console.log(condition, "working");
-    if (condition == null) {
+    if (arrivalPackage.product_status == "arrival") {
       await axios
         .put(
           "product/oneproduct/" + arrivalPackage.product_code + "/",
@@ -76,7 +75,7 @@ function Delivery() {
             User: arrivalPackage.User,
 
             is_cancel: arrivalPackage.is_cancel,
-            product_status: "Delivered",
+            product_status: "delivered",
             product_code: arrivalPackage.product_code,
           },
           {
@@ -229,7 +228,9 @@ function Delivery() {
                     </div>
                   </div>
                   <div className="w-1/6 mt-8">
-                    <button className="text-white text-lg bg-green-600 px-6 py-2 rounded-md" onClick={}>
+                    <button
+                      className="text-white text-lg bg-green-600 px-6 py-2 rounded-md"
+                      onClick={handleDeliver}>
                       Deliver
                     </button>
                   </div>

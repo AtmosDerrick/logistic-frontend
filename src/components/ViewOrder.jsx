@@ -98,7 +98,7 @@ function ViewOrder() {
                     </td>
 
                     <td className="py-2 px-4 border-b">
-                      {packageItem.datetime}
+                      {packageItem.datetime.split("T")[0]}
                     </td>
                   </tr>
                 ))}

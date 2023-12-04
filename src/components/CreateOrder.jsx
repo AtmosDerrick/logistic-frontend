@@ -38,7 +38,7 @@ const CreateOrder = () => {
   //setPromt
   const [prompt, setPrompt] = useState(false);
 
-  const { userInfo ,token } = useContext(UserContext);
+  const { userInfo, token } = useContext(UserContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -136,7 +136,6 @@ const CreateOrder = () => {
             reciever_location: recieversAddress,
             User: userInfo.User,
 
-            product_status: "Recieved",
             is_cancel: false,
             shipping_confirmation: null,
             arrival_confirmation: null,

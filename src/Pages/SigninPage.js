@@ -2,13 +2,14 @@ import React, { useState, useEffect, useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 function SigninPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setredirect] = useState(false);
 
-  const { setUser, user, setToken, setUserInfo, token, userInfo } =
+  const { setUser, user, setToken, setUserInfo, userInfo } =
     useContext(UserContext);
 
   const authencateUser = async (e) => {
@@ -24,6 +25,8 @@ function SigninPage() {
           setToken(res.data.token);
 
           setUser(res.data.user.id);
+
+          Cookies.set("auth_token", res.data.token, { expires: 7 });
           axios
             .get("auth/user/" + res.data.user.id, {
               headers: {
