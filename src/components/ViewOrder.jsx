@@ -14,6 +14,8 @@ function ViewOrder() {
 
   const { userInfo, setToken, token } = useContext(UserContext);
 
+  console.log(userInfo.location, "locaio");
+
   useEffect(() => {
     // Fetch the list of jobs
     axios
@@ -33,7 +35,9 @@ function ViewOrder() {
 
         // setViewPackages(sortedPackages);
       })
-      .catch((error) => {});
+      .catch((error) => {
+        console.log(error.data);
+      });
   }, [loading]);
 
   console.log(productCode, "kk");

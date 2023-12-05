@@ -52,7 +52,23 @@ function SigninPage() {
   };
 
   if (redirect) {
-    return <Navigate to="/mainPage" />;
+    // return userInfo ? userInfo.role !== "admin" <Navigate to="/mainPage" /> :"": "";
+    return userInfo ? (
+      userInfo.role !== "admin" ? (
+        <div>
+          {" "}
+          <Navigate to="/mainPage" />
+          {console.log("workier")}
+        </div>
+      ) : (
+        <div>
+          <Navigate to="/admin" />
+          {console.log("admin")}
+        </div>
+      )
+    ) : (
+      ""
+    );
   }
 
   return (

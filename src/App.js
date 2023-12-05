@@ -7,6 +7,7 @@ import Layout from "./asset/Layout";
 import SigninPage from "./Pages/SigninPage";
 import MainPage from "./Pages/MainPage";
 import { UserContext, UserContextProvider } from "./context/UserContext";
+import AdminHome from "./adminSection/pages/AdminHome";
 
 // https://logistic-backend-production.up.railway.app/
 
@@ -24,6 +25,7 @@ function App() {
               <Route index element={<MainPage />} />
               <Route path="/signin" element={<SigninPage />} />
               <Route path="/mainPage" element={<MainPage />} />
+              <Route path="/admin" element={<AdminHome />} />
             </Route>
           </Routes>
         </div>

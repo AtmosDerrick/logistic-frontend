@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=Montserrat:wght@700&family=Public+Sans:ital,wght@1,100&family=Roboto+Slab:wght@500&family=Roboto:ital,wght@0,900;1,900&family=Syne:wght@500&display=swap");
 
 input[type="text"],
 input[type="password"],
@@ -9,6 +10,12 @@ input[type="number"],
 input[type="tel"],
 textarea {
   @apply w-full border my-2 py-2 px-3 rounded-md h-12;
+}
+
+.adminFont {
+  font-family: "Montserrat", sans-serif;
+
+  font-family: "Syne", sans-serif;
 }
 
 textarea {
