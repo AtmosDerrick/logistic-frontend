@@ -1,13 +1,11 @@
 import React from "react";
 import SideBar from "../components/SideBar";
 import Main from "./Main";
+import NavBar from "../components/NavBar";
 
 function AdminHome() {
   return (
-    <div className="flex gap-2 mx-4">
-      <div className="w-1/4">
-        <SideBar />
-      </div>
+    <div className="">
       <div className="w-full">
         <Main />
       </div>

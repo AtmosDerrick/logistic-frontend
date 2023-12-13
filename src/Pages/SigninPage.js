@@ -26,7 +26,8 @@ function SigninPage() {
 
           setUser(res.data.user.id);
 
-          Cookies.set("auth_token", res.data.token, { expires: 7 });
+          console.log(res.data.user.id);
+
           axios
             .get("auth/user/" + res.data.user.id, {
               headers: {
@@ -56,7 +57,7 @@ function SigninPage() {
     return userInfo ? (
       userInfo.role !== "admin" ? (
         <div>
-          {" "}
+        
           <Navigate to="/mainPage" />
           {console.log("workier")}
         </div>
