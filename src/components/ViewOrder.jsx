@@ -95,10 +95,10 @@ function ViewOrder() {
                       {packageItem.sender_name}
                     </td>
                     <td className="py-2 px-4 border-b">
-                      {packageItem.product}
+                      {packageItem.package_name}
                     </td>
                     <td className="py-2 px-4 border-b">
-                      {packageItem.destination}
+                      {packageItem.sender_location}
                     </td>
 
                     <td className="py-2 px-4 border-b">

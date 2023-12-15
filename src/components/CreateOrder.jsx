@@ -42,6 +42,8 @@ const CreateOrder = () => {
 
   const { userInfo, token } = useContext(UserContext);
 
+  console.log("user", userInfo.location);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -106,6 +108,8 @@ const CreateOrder = () => {
     reciever_address: recieversAddress,
   };
 
+  console.log(userInfo.location.toLowerCase(), "uui");
+
   const handleSubmit = async () => {
     console.log("llllkkk");
 
@@ -124,9 +128,9 @@ const CreateOrder = () => {
           {
             sender_name: name,
             sender_contact: contact,
-            sender_location: userInfo.location.toLowerCase(),
+
             // sender_location: user.location,
-            package_name:product,
+            package_name: product,
             quantity,
             item_type: itemsType,
             destination: recieversAddress,
