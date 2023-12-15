@@ -35,6 +35,8 @@ const CreateOrder = () => {
   const [recieverEmail, setrecieverEmail] = useState("");
   const [recieversAddress, setrecieversAddress] = useState("");
 
+  const [alert, setAlert] = useState("");
+
   //setPromt
   const [prompt, setPrompt] = useState(false);
 
@@ -91,49 +93,48 @@ const CreateOrder = () => {
     sender_name: name,
 
     sender_contact: contact,
-    sender_email: email,
-    sender_address: Address,
     sender_location: userInfo.location,
 
-    product,
+    product_name: product,
     quantity,
-    weight: weight,
+
     item_type: itemsType,
-    destination: packageD,
     handle_preference: handle,
     price: cost,
     reciever_name: recieverName,
     reciever_contact: reciverContact,
-    reciever_email: recieverEmail,
     reciever_address: recieversAddress,
   };
 
   const handleSubmit = async () => {
     console.log("llllkkk");
 
-    try {
+    if (
+      name !== "" ||
+      contact !== "" ||
+      product !== "" ||
+      quantity !== "" ||
+      recieverName !== "" ||
+      reciverContact !== "" ||
+      recieversAddress !== ""
+    ) {
       await axios
         .post(
           "/product/create/",
           {
             sender_name: name,
             sender_contact: contact,
-            sender_email: email,
-            sender_address: Address,
             sender_location: userInfo.location.toLowerCase(),
             // sender_location: user.location,
-            product,
+            package_name:product,
             quantity,
-            weight,
             item_type: itemsType,
             destination: recieversAddress,
             handle_preference: handle,
             price: cost,
             reciever_name: recieverName,
             reciever_contact: reciverContact,
-            reciever_email: recieverEmail,
             reciever_address: recieversAddress,
-            reciever_location: recieversAddress,
             User: userInfo.User,
 
             is_cancel: false,
@@ -149,30 +150,30 @@ const CreateOrder = () => {
         )
         .then((res) => {
           console.log(res.data);
+          setName("");
+          setContact("");
+
+          setAddress("");
+
+          setCurrentPart(1);
+          setProduct("");
+          setQuantity("");
+
+          setrecieverName("");
+          setreciverContact("");
+          setEmail("");
+          setAddress("");
         })
         .catch((err) => {
           console.log(err.response.data);
+          setAlert(err.response.data);
         });
-    } catch {}
-
-    setName("");
-    setContact("");
-    setEmail("");
-    setAddress("");
-
-    setCurrentPart(1);
-    setProduct("");
-    setQuantity("");
-    setWeight("");
-
-    setrecieverName("");
-    setreciverContact("");
-    setEmail("");
-    setAddress("");
-
-    console.log(productInfo);
-
-    // setLoggedIn(false);
+    } else {
+      setAlert(true);
+      setTimeout(() => {
+        setAlert(false);
+      }, 3000);
+    }
   };
 
   const inputClass = "";
@@ -184,10 +185,15 @@ const CreateOrder = () => {
           className="h-4 bg-[#780000]"
           style={{ width: `${calculateProgress()}%` }}></div>
       </div>
+      {alert && (
+        <div className="text-center text-lg font-semibold text-red-500 mt-8">
+          <h2>{alert}</h2>
+        </div>
+      )}
       {currentPart === 1 && (
-        <div className="mt-4 w-full px-8 mx-auto">
+        <div className="mt-12 w-full px-8 mx-auto">
           <h2 className="text-lg font-semibold">Part 1: Sender's Info</h2>
-          <form>
+          <form className="mt-12">
             <label>
               Full name:
               <input
@@ -207,41 +213,21 @@ const CreateOrder = () => {
               />
             </label>
             <br />
-            <label>
-              Email
-              <input
-                type="text"
-                name="lastName"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </label>
-            <br />
-            <label>
-              Address:
-              <input
-                type="text"
-                name="lastName"
-                value={Address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-            </label>
           </form>
         </div>
       )}
 
       {currentPart === 2 && (
-        <div className="mt-4 w-full mx-auto">
+        <div className="mt-12 w-full mx-auto">
           <h2 className="text-lg font-semibold">Part 2: Product Info</h2>
-          <form>
+          <form className="mt-12">
             <div className="flex justify-between gap-4">
               <div className="w-full">
-                {" "}
                 <label>
                   Products {itemList}
                   <input
-                    type="email"
-                    name="email"
+                    type="text"
+                    name="product"
                     value={product}
                     onChange={(e) => setProduct(e.target.value)}
                   />
@@ -250,33 +236,23 @@ const CreateOrder = () => {
             </div>
 
             <div className="flex justify-between gap-4 pt-12">
-              {" "}
               <label>
                 <input
                   type="quantity"
                   name="quantity"
                   value={quantity}
                   placeholder=" Quantity:"
-                  className="p-2 font-medium mr-2"
+                  className="p-2 font-medium mr-2 border rounded-md"
                   onChange={(e) => setQuantity(e.target.value)}
                 />
               </label>
-              <label>
-                <input
-                  type="weight"
-                  name="weight"
-                  placeholder=" Weight:"
-                  className="p-2 font-medium mr-2"
-                  value={weight}
-                  onChange={(e) => setWeight(e.target.value)}
-                />
-              </label>
+
               <label className="flex">
                 <select
                   value={itemsType}
                   defaultValue={1}
                   onChange={(e) => setItemType(e.target.value)}
-                  className="py-2 px-4  flex items-center mr-2">
+                  className="py-2 px-4  flex items-center mr-2 border rounded-md">
                   <option value="">Select an item type</option>
                   <option value="Electronics">Electronics</option>
                   <option value="Clothing">Clothing</option>
@@ -290,24 +266,10 @@ const CreateOrder = () => {
             <div className="flex justify-between gap-4 mt-8">
               <label>
                 <select
-                  value={itemsType}
-                  defaultValue={1}
-                  onChange={(e) => setPackageD(e.target.value)}
-                  className="py-2 px-4  flex  w-full items-center">
-                  <option value="">Select Region</option>
-                  <option value="Electronics">Greater Accra</option>
-                  <option value="Clothing">Clothing</option>
-                  <option value="Furniture">Furniture</option>
-                  <option value="Books">Books</option>
-                  {/* Add more options as needed */}
-                </select>
-              </label>
-              <label>
-                <select
                   value={handle}
                   defaultValue={1}
                   onChange={(e) => setHandle(e.target.value)}
-                  className="py-2 px-4 w-full flex items-center">
+                  className="py-2 px-4 w-full flex items-center border rounded-md">
                   <option value="">Handle Preference:</option>
                   <option value="Electronics">Primuime Delivery</option>
                   <option value="Clothing">Free Delivery</option>
@@ -315,30 +277,20 @@ const CreateOrder = () => {
                   {/* Add more options as needed */}
                 </select>
               </label>
-
-              <div>
-                {" "}
-                <textarea
-                  id="w3review"
-                  name="w3review"
-                  rows="4"
-                  cols="50"
-                  placeholder="Description of items"
-                />
-              </div>
+              <label className="text-primary text-xl font-semibold flex items-center px-8 mt-12">
+                Ghc 50.00
+              </label>
             </div>
-            <label className="text-primary text-xl font-semibold flex items-center px-8">
-              Ghc 50.00
-            </label>
+
             <br />
           </form>
         </div>
       )}
 
       {currentPart === 3 && (
-        <div className="mt-4 w-3/4 mx-auto">
+        <div className="mt-12 w-3/4 mx-auto">
           <h2 className="text-lg font-semibold">Part 3: Recievers Info</h2>
-          <form>
+          <form className="mt-12">
             <label>
               Recievers Full name:
               <input
@@ -358,15 +310,7 @@ const CreateOrder = () => {
               />
             </label>
             <br />
-            <label>
-              Reciever's Email
-              <input
-                type="text"
-                name="lastName"
-                value={recieverEmail}
-                onChange={(e) => setrecieverEmail(e.target.value)}
-              />
-            </label>
+
             <br />
             <label>
               Reciever's Address:
@@ -384,7 +328,9 @@ const CreateOrder = () => {
       <div className="mx-auto w-full flex justify-between px-8 mt-8 ">
         {currentPart !== 1 ? (
           <div>
-            <div className="text-gray-900 flex gap-2 " onClick={handleBack}>
+            <div
+              className="text-gray-900 flex gap-2 cursor-pointer "
+              onClick={handleBack}>
               <div className="">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -411,9 +357,9 @@ const CreateOrder = () => {
           {currentPart !== 3 ? (
             <div className="">
               <div
-                className="text-white font-medium flex gap-2"
+                className="text-white font-medium flex gap-2 cursor-pointer"
                 onClick={handlenext}>
-                Next{" "}
+                Next
                 <div>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -434,7 +380,7 @@ const CreateOrder = () => {
           ) : (
             <div className=" ">
               <div
-                className=" flex gap-2 bg-primary px-4 py-2 font-semibold text-white"
+                className=" flex gap-2 bg-primary px-4 py-2 font-semibold text-white cursor-pointer"
                 onClick={handleSubmit}>
                 Submit
                 <div>
