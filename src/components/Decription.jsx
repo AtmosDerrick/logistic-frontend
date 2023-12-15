@@ -98,7 +98,7 @@ function Decription({ productCode }) {
             <li className="flex justify-between items-center py-2    my-1 border-b-2 ">
               <div className="text-gray-900 font-medium">Product Name</div>
               <div className="text-gray-500 font-medium">
-                {viewPackages.product}
+                {viewPackages.package_name}
               </div>
             </li>
             <li className="flex justify-between items-center py-2    my-1 border-b-2 ">
@@ -110,19 +110,12 @@ function Decription({ productCode }) {
             <li className="flex justify-between items-center py-2    my-1 border-b-2 ">
               <div className="text-gray-900 font-medium">Destination</div>
               <div className="text-gray-500 font-medium">
-                {viewPackages.destination}
+                {viewPackages.reciever_address}
               </div>
             </li>
+
             <li className="flex justify-between items-center py-2    my-1 border-b-2 ">
-              <div className="text-gray-900 font-medium">Cost</div>
-              <div className="text-gray-500 font-medium">Ghc 100</div>
-            </li>
-            <li className="flex justify-between items-center py-2    my-1 border-b-2 ">
-              <div className="text-gray-900 font-medium">Destination</div>
-              <div className="text-gray-500 font-medium">Accra</div>
-            </li>
-            <li className="flex justify-between items-center py-2    my-1 border-b-2 ">
-              <div className="text-gray-900 font-medium">Price</div>
+              <div className="text-gray-900 font-medium">Fee</div>
               <div className="text-gray-500 font-medium">
                 {viewPackages.price}
               </div>

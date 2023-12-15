@@ -89,7 +89,7 @@ function ViewOrder() {
                     key={packageItem.product_code}
                     className="hover:cursor-pointer hover:opacity-80 mb-4"
                     onClick={() => {
-                      setProductCode(packageItem.product_code);
+                      setProductCode(packageItem.package_code);
                     }}>
                     <td className="py-2 px-4 border-b">
                       {packageItem.sender_name}
